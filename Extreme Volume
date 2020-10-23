@@ -1,0 +1,27 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © timlott
+//@version=4
+
+// Extreme Volume
+//   Measures extreme volume by coloring volume bars that much higher than 50 day moving average
+//   by using multiplier of moving average
+
+study(title="Extreme Volume", shorttitle="Extreme Vol", format=format.volume)
+
+//inputs
+showMA=input(true)
+lengthMA=input(50)
+multiplier1=input(2)
+multiplier2=input(3)
+
+// volume and MA conditions
+vol = volume
+v1 = sma(volume, lengthMA)
+v2 = (v1*multiplier1)
+v3 = (v1*multiplier2)
+
+// color conditions
+c = vol < v1 ? color.green : vol > v3 ? color.red : vol > v2 ? color.teal : color.green
+	
+plot(vol, color=c, style=plot.style_columns, title="Volume", transp=40)
+plot(showMA?sma(vol, lengthMA):na, style=plot.style_line, color=color.black, title="Volume MA", transp=20)
